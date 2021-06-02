@@ -5,9 +5,11 @@ import { Card, Row } from "react-bootstrap";
 import { UserContext } from "../../App";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import MessageIcon from "@material-ui/icons/Message";
 import IconButton from "@material-ui/core/IconButton";
 import { useState } from "react";
 import PopupCard from "./PopupCard";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [allPost] = useContext(UserContext);
@@ -36,7 +38,7 @@ const Profile = () => {
       <Row>
         {myPost.map((post, index) => (
           <Col key={index} md={3} className="mb-3">
-            <Card border="light" style={{ width: "18rem" }}>
+            <Card border="light" style={{ width: "18rem", minHeight: "400px" }}>
               <Card.Header className="fw-bold">
                 User: {post.userId}
                 <IconButton onClick={handlePopup} title="Edit">
@@ -53,14 +55,26 @@ const Profile = () => {
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Text>{post.body}</Card.Text>
               </Card.Body>
+              <Card.Footer className="bg-white fw-bolder">
+                <Link
+                  className="text-dark text-decoration-none"
+                  to={`/blog/${post.id}/details`}
+                >
+                  Comments
+                  <IconButton>
+                    <MessageIcon />
+                  </IconButton>
+                </Link>
+              </Card.Footer>
             </Card>{" "}
-            <PopupCard post={post} modalIsOpen={modalIsOpen} closeModal={closeModal} />
+            <PopupCard
+              post={post}
+              modalIsOpen={modalIsOpen}
+              closeModal={closeModal}
+            />
           </Col>
-          
         ))}
-    
       </Row>
-      
     </div>
   );
 };

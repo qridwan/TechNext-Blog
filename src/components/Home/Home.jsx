@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <div>
       <Row className="justify-content-center mt-5">
-      {data}
+        {data}
         <ReactPaginate
           previousLabel={"Load"}
           nextLabel={"Load More"}
@@ -53,7 +53,6 @@ const Home = () => {
           subContainerClassName={"pages pagination"}
           activeClassName={"active"}
         />
-        
       </Row>
     </div>
   );
