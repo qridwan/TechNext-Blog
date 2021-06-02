@@ -20,7 +20,7 @@ const Navigation = () => {
             </Link>
           </Nav.Link>
           <Nav.Link className=" nav-text">
-            <Link to="/profile" className="link">
+            <Link to={`/profile/${2}`} className="link">
               Profile
             </Link>
           </Nav.Link>
