@@ -23,7 +23,6 @@ const Profile = () => {
         </Tab>
           <Tab eventKey="users" title="Users">
             <UserTable />
-            <Users />
           </Tab>
         
       </Tabs> : <MyBlogs id={userId}/>}

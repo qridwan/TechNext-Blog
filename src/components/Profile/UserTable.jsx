@@ -1,50 +1,53 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-const useSortableData = (items, config = null) => {
-  const [sortConfig, setSortConfig] = React.useState(config);
-
-  const sortedItems = useMemo(() => {
-    let sortableItems = [...items];
-    if (sortConfig !== null) {
-      sortableItems.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    return sortableItems;
-  }, [items, sortConfig]);
-
-  const requestSort = (key) => {
-    let direction = "ascending";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "ascending"
-    ) {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  return { items: sortedItems, requestSort, sortConfig };
-};
+import SortIcon from "@material-ui/icons/Sort";
+import { IconButton, TablePagination } from "@material-ui/core";
+import TablePaginationActions from "./tablePageAction";
+import { useSortableData } from "./sortingFunctions";
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const results = !searchTerm
-    ? users
-    : users.filter((user) =>
-        user.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
-      );
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchByName, setSearchByName] = useState("");
+  const [searchByEmail, setSearchByEmail] = useState("");
+  const [searchByWebsite, setSearchByWebsite] = useState("");
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  let results;
+  (() => {
+    if (searchByName) {
+      results = users.filter((user) =>
+        user.name.toLowerCase().includes(searchByName.toLocaleLowerCase())
+      );
+      return results;
+    }
+    if (searchByEmail) {
+      results = users.filter((user) =>
+        user.email.toLowerCase().includes(searchByEmail.toLocaleLowerCase())
+      );
+      return results;
+    }
+
+    if (searchByWebsite) {
+      results = users.filter((user) =>
+        user.website.toLowerCase().includes(searchByWebsite.toLocaleLowerCase())
+      );
+      return results;
+    } else {
+      results = users;
+      return results;
+    }
+  })();
   const { items, requestSort, sortConfig } = useSortableData(results);
+
   const getClassNamesFor = (name) => {
     if (!sortConfig) {
       return;
@@ -52,8 +55,14 @@ const UserTable = () => {
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
+  const handleNameSearch = (e) => {
+    setSearchByName(e.target.value);
+  };
+  const handleEmailSearch = (e) => {
+    setSearchByEmail(e.target.value);
+  };
+  const handleWebsiteSearch = (e) => {
+    setSearchByWebsite(e.target.value);
   };
 
   useEffect(() => {
@@ -65,48 +74,73 @@ const UserTable = () => {
   return (
     <div className="w-75 m-auto">
       <table class="table table-hover">
-        
         <thead>
           <tr>
             <th scope="col">
-            <input
-          type="text"
-          placeholder="Search"
-          value={searchTerm}
-          onChange={handleChange}
-        />
-        <button
-                type="button"
+              Name{" "}
+              <IconButton
                 onClick={() => requestSort("name")}
                 className={getClassNamesFor("name")}
               >
-                Name
-              </button>
+                <SortIcon />
+              </IconButton>
             </th>
             <th scope="col">
-              <button
-                type="button"
+              Email{" "}
+              <IconButton
                 onClick={() => requestSort("email")}
                 className={getClassNamesFor("email")}
               >
-                Email
-              </button>
+                <SortIcon />
+              </IconButton>
             </th>
             <th scope="col">
-              {" "}
-              <button
-                type="button"
+              Website{" "}
+              <IconButton
                 onClick={() => requestSort("website")}
                 className={getClassNamesFor("website")}
               >
-                Website
-              </button>
+                <SortIcon />
+              </IconButton>
             </th>
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr>
+          <tr>
+            <td>
+              {" "}
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by name"
+                value={searchByName}
+                onChange={handleNameSearch}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search email"
+                value={searchByEmail}
+                onChange={handleEmailSearch}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search website"
+                value={searchByWebsite}
+                onChange={handleWebsiteSearch}
+              />
+            </td>
+          </tr>
+          {(rowsPerPage > 0
+            ? items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : items
+          ).map((item) => (
+            <tr key={item.id}>
               <td>
                 <Link
                   className="text-dark text-decoration-none"
@@ -120,6 +154,20 @@ const UserTable = () => {
             </tr>
           ))}
         </tbody>
+        <TablePagination
+          rowsPerPageOptions={[3, 5, { label: "All", value: -1 }]}
+          colSpan={3}
+          count={items.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          SelectProps={{
+            inputProps: { "aria-label": "rows per page" },
+            native: true,
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
       </table>
     </div>
   );
