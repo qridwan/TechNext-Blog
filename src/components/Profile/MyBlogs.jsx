@@ -10,11 +10,12 @@ import PopupCard from "./PopupCard";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../App";
+import Slide from "react-reveal/Slide";
 
 const MyBlogs = ({ id }) => {
   const [allPost] = useContext(UserContext);
   const myPost = allPost.filter((post) => post.userId == id);
-  
+
   const handleDelete = (id) => {
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
       method: "DELETE",
@@ -57,8 +58,10 @@ const MyBlogs = ({ id }) => {
                 </IconButton>
               </Card.Header>
               <Card.Body>
-                <Card.Title>{post.title}</Card.Title>
-                <Card.Text>{post.body}</Card.Text>
+                <Card.Title className="text-capitalize">
+                  {post.title}
+                </Card.Title>
+                <Card.Text className="text-justify">{post.body}</Card.Text>
               </Card.Body>
               <Card.Footer className="bg-white fw-bolder">
                 <Link

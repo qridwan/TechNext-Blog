@@ -6,7 +6,7 @@ const Navigation = () => {
   return (
     <Navbar className="py-4" bg="" expand="lg">
       <Navbar.Brand className="fw-bolder">
-        <Link to="/" className="link">
+        <Link to="/" className="text-success text-decoration-none">
           {" "}
           TechNext.BLOG{" "}
         </Link>

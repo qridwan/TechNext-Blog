@@ -112,7 +112,7 @@ const UserTable = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search by name"
+                placeholder="Search by Name"
                 value={searchByName}
                 onChange={handleNameSearch}
               />
@@ -121,7 +121,7 @@ const UserTable = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search email"
+                placeholder="Search by Email"
                 value={searchByEmail}
                 onChange={handleEmailSearch}
               />
@@ -130,7 +130,7 @@ const UserTable = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search website"
+                placeholder="Search by Website"
                 value={searchByWebsite}
                 onChange={handleWebsiteSearch}
               />

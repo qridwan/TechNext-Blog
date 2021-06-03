@@ -6,6 +6,7 @@ import { Card, Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { UserContext } from "../../App";
+import Slide from "react-reveal/Slide";
 
 const Home = () => {
   const [allPost] = useContext(UserContext);
@@ -22,7 +23,7 @@ const Home = () => {
         <Card border="light" style={{ width: "18rem" }}>
           <Card.Header>User: {p.userId}</Card.Header>
           <Card.Body>
-            <Card.Title>{p.title}</Card.Title>
+            <Card.Title className="text-capitalize">{p.title}</Card.Title>
             <Card.Text>{p.body}</Card.Text>
           </Card.Body>
         </Card>{" "}
@@ -43,17 +44,20 @@ const Home = () => {
   }, [offset, allPost.length]);
   return (
     <div>
-      <Row className="justify-content-center mt-5">
-        {data}
-        <ReactPaginate
-          previousLabel={"Load"}
-          nextLabel={"Load More"}
-          onPageChange={handlePageClick}
-          containerClassName={"pagination"}
-          subContainerClassName={"pages pagination"}
-          activeClassName={"active"}
-        />
-      </Row>
+      <Slide top cascade>
+        {" "}
+        <Row className="justify-content-center mt-5">
+          {data}
+          <ReactPaginate
+            previousLabel={"Load"}
+            nextLabel={"Load More"}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+          />
+        </Row>
+      </Slide>
     </div>
   );
 };
