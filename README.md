@@ -1,5 +1,5 @@
 ## TechNext-Blog
-## [Live Demo]()
+## [Live Demo](https://22technext-blog.netlify.app/)
 ## Tech used:
 - React
 - Use Context, 
